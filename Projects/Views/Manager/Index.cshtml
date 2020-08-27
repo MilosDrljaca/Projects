@@ -1,0 +1,89 @@
+﻿@model PaginatedList<DomainModel.Manager>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<head>
+    <link href="..\css\nlb.css" rel="stylesheet" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+
+
+<p class="first">
+    <button class="button"><a asp-controller="Manager" asp-action="Create">Create New Manager</a></button>
+    <button class="button"><a asp-controller="Home" asp-action="Index">Project List</a></button>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p style="text-align:right">
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" />
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Id</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ManagerNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Manager</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["Active"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Active</a>
+            </th>
+
+            <th style="text-align:center;">@Html.DisplayName("Operations")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID_Manager)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManagerName)
+                </td>
+                <td>
+                    @if (item.Active > 0)
+                    {
+                        @Html.DisplayName("Active");
+                    }
+                    else
+                    {
+                        @Html.DisplayName("Inactive");
+                    }
+                </td>
+                <td style="text-align:center;">
+                    <button class="button"><a asp-action="Edit" asp-route-id="@item.ID_Manager">Edit</a></button>
+                    <button class="button"><a asp-action="Details" asp-route-id="@item.ID_Manager">Details</a></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+<button class="button"><a asp-action="Index">Back to Full List</a></button>

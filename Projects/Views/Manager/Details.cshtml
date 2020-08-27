@@ -1,0 +1,47 @@
+﻿@model DomainModel.Manager
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<head>
+    <link href="~/css/nlb.css" rel="stylesheet" />
+</head>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Manager</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ID_Manager)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ID_Manager)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ManagerName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ManagerName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Active > 0)
+            {
+                @Html.DisplayName("Active");
+            }
+            else
+            {
+                @Html.DisplayName("Inactive");
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <button class="button">@Html.ActionLink("Edit", "Edit", new { id = Model.ID_Manager })</button>
+    <button class="button"><a asp-action="Index">Back to List</a></button>
+</div>

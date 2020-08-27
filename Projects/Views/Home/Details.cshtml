@@ -1,0 +1,58 @@
+﻿@model DomainModel.Project
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<head>
+    <link href="~/css/nlb.css" rel="stylesheet" />
+</head>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ID_Project)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ID_Project)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ID_Manager)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var manager in ViewBag.Managers)
+            {
+                @if (manager.ID_Manager == @Model.ID_Manager)
+                {
+                    @Html.DisplayName(manager.ManagerName)
+                }
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <button class="button">@Html.ActionLink("Edit", "Edit", new { id = Model.ID_Project })</button>
+    <button class="button"><a asp-action="Index">Back to List</a></button>
+</div>

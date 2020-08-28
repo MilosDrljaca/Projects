@@ -56,7 +56,17 @@ namespace DataAccesLayer.Repositories
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                Manager manager = context.Managers.Find(id);
+                Manager manager = context.Managers.Where(p => p.ID_Manager == id).FirstOrDefault();
+                context.SaveChanges();
+                return manager;
+            }
+        }
+
+        public Manager Edit(Manager manager)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                context.Entry(manager).State = EntityState.Modified;
                 context.SaveChanges();
                 return manager;
             }

@@ -175,7 +175,7 @@ namespace Projects.Controllers
             List<Manager> managers = _managerService.GetAllActiveManagers();
             ViewBag.Managers = managers;
 
-            return View(_context.Projects.Where(p => p.ID_Project == id).FirstOrDefault());
+            return View(_projectService.GetProjectByID(id));
         }
 
         [HttpPost]
@@ -198,8 +198,7 @@ namespace Projects.Controllers
                     }
                 }
 
-                _context.Entry(project).State = EntityState.Modified;
-                _context.SaveChanges();
+                _projectService.Edit(project);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

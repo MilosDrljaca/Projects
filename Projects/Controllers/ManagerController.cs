@@ -105,14 +105,13 @@ namespace Projects.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            return View(_context.Managers.Where(p => p.ID_Manager == id).FirstOrDefault());
+            return View(_managerService.GetManagerById(id));
         }
 
         [HttpPost]
         public IActionResult Edit(int id, Manager manager)
         {
-            _context.Entry(manager).State = EntityState.Modified;
-            _context.SaveChanges();
+            _managerService.Edit(manager);
             return RedirectToAction("Index");
         }
 

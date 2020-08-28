@@ -10,6 +10,8 @@ namespace Services.Interfaces
         public Project GetProjectByID(int Id);
         public List<Project> GetAllProjects();
         public void Delete(Project project);
+        public void Edit(Project project);
+
 
     }
 }

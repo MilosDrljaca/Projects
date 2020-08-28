@@ -62,5 +62,11 @@ namespace Services
             ProjectRepo projectRepository = new ProjectRepo();
             projectRepository.Delete(project);
         }
+
+        public void Edit(Project project)
+        {
+            ProjectRepo projectRepository = new ProjectRepo();
+            projectRepository.Edit(project);
+        }
     }
 }

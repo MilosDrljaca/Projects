@@ -1,5 +1,6 @@
 ﻿using DataAccesLayer.CustomExceptions;
 using DomainModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace DataAccessLayer.Repositories
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                Project project = context.Projects.Find(id);
+                Project project = context.Projects.Where(p => p.ID_Project == id).FirstOrDefault();
                 context.SaveChanges();
                 return project;
             }
@@ -57,6 +58,15 @@ namespace DataAccessLayer.Repositories
                 List<Project> projects = context.Projects.ToList();
                 context.SaveChanges();
                 return projects;
+            }
+        }
+        public Project Edit(Project project)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                context.Entry(project).State = EntityState.Modified;
+                context.SaveChanges();
+                return project;
             }
         }
 

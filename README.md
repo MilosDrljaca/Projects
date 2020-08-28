@@ -1,6 +1,5 @@
-<h1>Projects - Project management application</h1>
-
-Architecture is based on concept of <b>clean architecture</b> combined with layered pattern architecture. Components within the layered architecture pattern are organized into horizontal layers, each layer performing a specific role within the application.<br/>
+<h1>Projects</h1>
+The <b>Project management application </b> is a multilayered <b>Asp .Net Core application</b> that uses different programming patterns to basically do CRUD operations with projects, and also deal with managers and their relationship with projects. Architecture is based on concept of <b>clean architecture</b> combined with layered pattern architecture. Components within the layered architecture pattern are organized into horizontal layers, each layer performing a specific role within the application.<br/>
 
 There are three different layers:
 <ul>

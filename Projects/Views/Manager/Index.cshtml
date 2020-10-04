@@ -9,8 +9,8 @@
 
 
 <p class="first">
-    <button class="button"><a asp-controller="Manager" asp-action="Create">Create New Manager</a></button>
-    <button class="button"><a asp-controller="Home" asp-action="Index">Project List</a></button>
+    <a class="button" asp-controller="Manager" asp-action="Create">Create New Manager</a>
+    <a class="button" asp-controller="Home" asp-action="Index">Project List</a>
 </p>
 
 <form asp-action="Index" method="get">
@@ -59,8 +59,8 @@
                     }
                 </td>
                 <td style="text-align:center;">
-                    <button class="button"><a asp-action="Edit" asp-route-id="@item.ID_Manager">Edit</a></button>
-                    <button class="button"><a asp-action="Details" asp-route-id="@item.ID_Manager">Details</a></button>
+                    <a class="button" asp-action="Edit" asp-route-id="@item.ID_Manager">Edit</a>
+                    <a class="button" asp-action="Details" asp-route-id="@item.ID_Manager">Details</a>
                 </td>
             </tr>
         }
@@ -85,4 +85,4 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
-<button class="button"><a asp-action="Index">Back to Full List</a></button>
+<a class="button" asp-action="Index">Back to Full List</a>

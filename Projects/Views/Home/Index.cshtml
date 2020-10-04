@@ -10,8 +10,8 @@
 
 
 <p class="first">
-    <button class="button"><a asp-action="Create">Create New Project</a></button>
-    <button class="button"><a asp-controller="Manager" asp-action="Index">Manager List</a></button>
+    <a class="button" asp-action="Create">Create New Project</a>
+    <a class="button" asp-controller="Manager" asp-action="Index">Manager List</a>
 </p>
 
 <form asp-action="Index" method="get">
@@ -70,9 +70,9 @@
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
                 <td style="text-align:center;">
-                    <button class="button"><a asp-action="Edit" asp-route-id="@item.ID_Project">Edit</a></button>
-                    <button class="button"><a asp-action="Details" asp-route-id="@item.ID_Project">Details</a></button>
-                    <button class="button"><a asp-action="Delete" asp-route-id="@item.ID_Project">Delete</a></button>
+                    <a class="button" asp-action="Edit" asp-route-id="@item.ID_Project">Edit</a>
+                    <a class="button" asp-action="Details" asp-route-id="@item.ID_Project">Details</a>
+                    <a class="button" asp-action="Delete" asp-route-id="@item.ID_Project">Delete</a>
                 </td>
             </tr>
         }
@@ -99,5 +99,5 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
-<button class="button"><a asp-action="Index">Back to Full List</a></button>
+<a class="button" asp-action="Index">Back to Full List</a>
 

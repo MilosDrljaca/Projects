@@ -51,7 +51,7 @@
     box-shadow: 0 3px #999;
 }
 
-    .button a {
+     a.button {
         color: black;
         text-decoration: none;
     }

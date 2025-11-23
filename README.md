@@ -42,7 +42,7 @@ Includes:
 ASP.NET Core MVC application used to interact with the system.
 
 Contains:
-- Controllers (`HomeController`, `ManagerController`)
+- Controllers (`ProjectController`, `ManagerController`)
 - Views (Razor Views)
 - ViewModels (`PaginatedList`, `ErrorViewModel`)
 - Static files in `wwwroot/`

@@ -8,7 +8,7 @@ namespace DataAccessLayer
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-DDBVCPJ;Database=ProjectsDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=MILOS;Database=ProjectsDB;Trusted_Connection=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

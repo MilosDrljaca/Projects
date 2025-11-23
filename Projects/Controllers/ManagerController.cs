@@ -1,124 +1,114 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using DataAccessLayer;
-using DomainModel;
-using Microsoft.AspNetCore.Http;
+﻿using DomainModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Projects.Models;
+using Services;
 using Services.Interfaces;
 using Services.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Projects.Controllers
+namespace Projects.Controllers;
+
+public class ManagerController : Controller
 {
-    public class ManagerController : Controller
+    private readonly IManagerService _managerService;
+
+    public ManagerController(IManagerService managerService)
     {
-        private readonly IManagerService _managerService;
-        private readonly ApplicationDbContext _context;
+        _managerService = managerService;
+    }
 
-        public ManagerController(IManagerService managerService, ApplicationDbContext context)
+    public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+    {
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["IdSortParm"] = sortOrder == "Id" ? "id_desc" : "Id";
+        ViewData["Active"] = sortOrder == "Active" ? "active_desc" : "Active";
+        ViewData["ManagerNameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "manager_name" : "";
+
+        if (searchString != null)
+            pageNumber = 1;
+        else
+            searchString = currentFilter;
+
+        ViewData["CurrentFilter"] = searchString;
+
+        var managers = _managerService.GetAllManagers().AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchString))
         {
-            _managerService = managerService;
-            _context = context;
+            managers = managers.Where(s => s.ManagerName.Contains(searchString));
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        managers = sortOrder switch
         {
-            ViewData["CurrentSort"] = sortOrder;
+            "id_desc" => managers.OrderByDescending(s => s.ID_Manager),
+            "active_desc" => managers.OrderByDescending(s => s.Active),
+            "manager_name" => managers.OrderBy(s => s.ManagerName),
+            _ => managers.OrderBy(s => s.ID_Manager)
+        };
 
-            ViewData["IdSortParm"] = sortOrder == "Id" ? "id_desc" : "Id";
-            ViewData["Active"] = sortOrder == "Active" ? "active_desc" : "Active";
-            ViewData["ManagerNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "manager_name" : "";
+        int pageSize = 5;
 
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
+        var paged = PaginatedList<Manager>.Create(managers, pageNumber ?? 1, pageSize);
+        return View(paged);
+    }
 
-            ViewData["CurrentFilter"] = searchString;
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
 
-            var managers = from s in _context.Managers
-                           select s;
+    [HttpPost]
+    public IActionResult Create(CreateManagerRequest request)
+    {
+        if (!ModelState.IsValid)
+            return View(request);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                managers = managers.Where(s => s.ManagerName.Contains(searchString)
-                                      );
-            }
-
-            switch (sortOrder)
-            {
-                case "id_desc":
-                    managers = managers.OrderByDescending(s => s.ID_Manager);
-                    break;
-                case "active_desc":
-                    managers = managers.OrderByDescending(s => s.Active);
-                    break;
-
-                case "manager_name":
-                    managers = managers.OrderBy(s => s.ManagerName);
-                    break;
-
-                default:
-                    managers = managers.OrderBy(s => s.ID_Manager);
-                    break;
-            }
-            int pageSize = 5;
-            return View(await PaginatedList<Manager>.CreateAsync(managers.AsNoTracking(), pageNumber ?? 1, pageSize));
-
-        }
-
-        [HttpGet]
-        public IActionResult Create()
+        try
         {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Create([FromForm] CreateManagerRequest createManagerRequest)
-        {
-            if (!ModelState.IsValid)
+            var manager = new Manager
             {
-                return BadRequest(ModelState);
-            }
-
-            Manager manager = new Manager
-            {
-
-                ManagerName = createManagerRequest.ManagerName,
-                Active = 1,
-
+                ManagerName = request.ManagerName,
+                Active = 1
             };
 
             _managerService.CreateManager(manager);
 
-            return RedirectToAction("Index", "Manager");
+            return RedirectToAction("Index");
         }
-
-        [HttpGet]
-        public IActionResult Edit(int id)
+        catch (ValidationServiceException ex)
         {
-            return View(_managerService.GetManagerById(id));
+            ModelState.AddModelError("", ex.Message);
+            return View(request);
         }
+    }
 
-        [HttpPost]
-        public IActionResult Edit(int id, Manager manager)
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        var manager = _managerService.GetManagerById(id);
+        return View(manager);
+    }
+
+    [HttpPost]
+    public IActionResult Edit(int id, Manager manager)
+    {
+        try
         {
             _managerService.Edit(manager);
             return RedirectToAction("Index");
         }
-
-        [HttpGet]
-        public IActionResult Details(int id)
+        catch (ValidationServiceException ex)
         {
-            return View(_managerService.GetManagerById(id));
+            ModelState.AddModelError("", ex.Message);
+            return View(manager);
         }
+    }
+
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        return View(_managerService.GetManagerById(id));
     }
 }

@@ -5,42 +5,52 @@ using System.Collections.Generic;
 
 namespace Services;
 
-public class ManagerService : IManagerService
+public class ManagerService(IManagerRepository managerRepository) : IManagerService
 {
-    private readonly IManagerRepository _managerRepository;
-
-    public ManagerService(IManagerRepository managerRepository)
-    {
-        _managerRepository = managerRepository;
-    }
-    public List<Manager> GetAllManagers()
-    {
-        return _managerRepository.GetAllManagers();
-    }
-
-    public List<Manager> GetAllActiveManagers()
-    {
-        return _managerRepository.GetAllActiveManagers();
-    }
+    private readonly IManagerRepository _repo = managerRepository;
 
     public Manager CreateManager(Manager manager)
     {
-        _managerRepository.CreateManager(manager);
-        return manager;
+        if (string.IsNullOrWhiteSpace(manager.ManagerName))
+            throw new ValidationServiceException("Manager name cannot be empty.");
+
+        if (manager.Active < 0)
+            throw new ValidationServiceException("Active flag must be 0 or 1.");
+
+        if (_repo.GetManagerByManagerName(manager.ManagerName) != null)
+            throw new ValidationServiceException(
+                $"Manager '{manager.ManagerName}' already exists.");
+
+        return _repo.CreateManager(manager);
     }
 
-    public Manager GetManagerByManagerName(string managerName)
+    public List<Manager> GetAllManagers() =>
+        _repo.GetAllManagers();
+
+    public List<Manager> GetAllActiveManagers() =>
+        _repo.GetAllActiveManagers();
+
+    public Manager GetManagerByManagerName(string name)
     {
-        return _managerRepository.GetManagerByManagerName(managerName);
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ValidationServiceException("Manager name cannot be empty.");
+
+        return _repo.GetManagerByManagerName(name);
     }
 
     public Manager GetManagerById(int id)
     {
-        return _managerRepository.GetManagerById(id);
+        if (id <= 0)
+            throw new ValidationServiceException("Invalid manager ID.");
+
+        return _repo.GetManagerById(id);
     }
 
     public void Edit(Manager manager)
     {
-        _managerRepository.Edit(manager);
+        if (string.IsNullOrWhiteSpace(manager.ManagerName))
+            throw new ValidationServiceException("Manager name cannot be empty.");
+
+        _repo.Edit(manager);
     }
 }

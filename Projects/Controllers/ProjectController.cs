@@ -8,6 +8,7 @@ using System.Linq;
 
 namespace Projects.Controllers;
 
+[Route("projects")]
 public class ProjectController : Controller
 {
     private readonly IProjectService _projectService;
@@ -19,6 +20,13 @@ public class ProjectController : Controller
         _managerService = managerService;
     }
 
+    [HttpGet("/")]
+    public IActionResult Landing()
+    {
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("")]
     public IActionResult Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
     {
         ViewData["CurrentSort"] = sortOrder;
@@ -65,14 +73,14 @@ public class ProjectController : Controller
         return View(paginated);
     }
 
-    [HttpGet]
+    [HttpGet("create")]
     public IActionResult Create()
     {
         ViewBag.Managers = _managerService.GetAllActiveManagers();
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public IActionResult Create(CreateProjectRequest request)
     {
         if (!ModelState.IsValid)
@@ -101,14 +109,14 @@ public class ProjectController : Controller
         }
     }
 
-    [HttpGet]
+    [HttpGet("{id}/edit")]
     public IActionResult Edit(int id)
     {
         ViewBag.Managers = _managerService.GetAllActiveManagers();
         return View(_projectService.GetProjectByID(id));
     }
 
-    [HttpPost]
+    [HttpPost("{id}/edit")]
     public IActionResult Edit(Project project)
     {
         try
@@ -132,21 +140,22 @@ public class ProjectController : Controller
         }
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public IActionResult Details(int id)
     {
         ViewBag.Managers = _managerService.GetAllManagers();
         return View(_projectService.GetProjectByID(id));
     }
 
-    [HttpGet]
+    [HttpGet("{id}/delete")]
     public IActionResult Delete(int id)
     {
         ViewBag.Managers = _managerService.GetAllManagers();
         return View(_projectService.GetProjectByID(id));
     }
 
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("{id}/delete")]
+    [ActionName("Delete")]
     public IActionResult DeleteConfirmed(int id)
     {
         var project = _projectService.GetProjectByID(id);

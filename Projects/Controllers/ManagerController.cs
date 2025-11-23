@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Projects.Controllers;
 
+[Route("managers")]
 public class ManagerController : Controller
 {
     private readonly IManagerService _managerService;
@@ -18,6 +19,7 @@ public class ManagerController : Controller
         _managerService = managerService;
     }
 
+    [HttpGet("")]
     public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
     {
         ViewData["CurrentSort"] = sortOrder;
@@ -53,13 +55,13 @@ public class ManagerController : Controller
         return View(paged);
     }
 
-    [HttpGet]
+    [HttpGet("create")]
     public IActionResult Create()
     {
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public IActionResult Create(CreateManagerRequest request)
     {
         if (!ModelState.IsValid)
@@ -84,14 +86,14 @@ public class ManagerController : Controller
         }
     }
 
-    [HttpGet]
+    [HttpGet("edit/{id}")]
     public IActionResult Edit(int id)
     {
         var manager = _managerService.GetManagerById(id);
         return View(manager);
     }
 
-    [HttpPost]
+    [HttpPost("edit/{id}")]
     public IActionResult Edit(int id, Manager manager)
     {
         try
@@ -106,7 +108,7 @@ public class ManagerController : Controller
         }
     }
 
-    [HttpGet]
+    [HttpGet("details/{id}")]
     public IActionResult Details(int id)
     {
         return View(_managerService.GetManagerById(id));

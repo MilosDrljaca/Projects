@@ -10,7 +10,7 @@
 
 
 <p class="first">
-    <a class="button" asp-action="Create">Create New Project</a>
+    <a class="button" asp-controller="Project" asp-action="Create">Create New Project</a>
     <a class="button" asp-controller="Manager" asp-action="Index">Manager List</a>
 </p>
 
@@ -77,9 +77,9 @@
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
                 <td style="text-align:center;">
-                    <a class="button" asp-action="Edit" asp-route-id="@item.ID_Project">Edit</a>
-                    <a class="button" asp-action="Details" asp-route-id="@item.ID_Project">Details</a>
-                    <a class="button" asp-action="Delete" asp-route-id="@item.ID_Project">Delete</a>
+                    <a class="button" asp-controller="Project" asp-action="Edit" asp-route-id="@item.ID_Project">Edit</a>
+                    <a class="button" asp-controller="Project" asp-action="Details" asp-route-id="@item.ID_Project">Details</a>
+                    <a class="button" asp-controller="Project" asp-action="Delete" asp-route-id="@item.ID_Project">Delete</a>
                 </td>
             </tr>
         }
@@ -92,19 +92,23 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Index"
+<a asp-controller="Project"
+   asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
-<a asp-action="Index"
+
+<a asp-controller="Project"
+   asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @nextDisabled">
     Next
 </a>
-<a class="button" asp-action="Index">Back to Full List</a>
+
+<a class="button" asp-controller="Project" asp-action="Index">Back to Full List</a>
 

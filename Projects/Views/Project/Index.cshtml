@@ -55,12 +55,19 @@
                     @Html.DisplayFor(modelItem => item.ProjectName)
                 </td>
                 <td>
-                    @foreach (var manager in ViewBag.Managers)
+                    @if (ViewBag.Managers != null)
                     {
-                        @if (manager.ID_Manager == item.ID_Manager)
+                        foreach (var manager in ViewBag.Managers)
                         {
-                            @Html.DisplayName(manager.ManagerName)
+                            if (manager.ID_Manager == item.ID_Manager)
+                            {
+                                @manager.ManagerName
+                            }
                         }
+                    }
+                    else
+                    {
+                        <span>No manager</span>
                     }
                 </td>
                 <td>

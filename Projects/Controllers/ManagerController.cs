@@ -47,7 +47,7 @@ public class ManagerController : Controller
             _ => managers.OrderBy(s => s.ID_Manager)
         };
 
-        int pageSize = 5;
+        int pageSize = 10;
 
         var paged = PaginatedList<Manager>.Create(managers, pageNumber ?? 1, pageSize);
         return View(paged);

@@ -6,15 +6,13 @@ namespace DataAccessLayer
 {
     public class ApplicationDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=MILOS;Database=ProjectsDB;Trusted_Connection=True;TrustServerCertificate=True;");
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>().HasData(
-                new Project { ID_Project = 1, ProjectName = ".Net Core Application", ID_Manager = 1, StartDate = DateTime.Now.Date, EndDate = null }
+                new Project { ID_Project = 1, ProjectName = ".Net Core Application", ID_Manager = 1, StartDate = new DateTime(2025, 1, 1), EndDate = null }
             );
 
             modelBuilder.Entity<Manager>().HasData(

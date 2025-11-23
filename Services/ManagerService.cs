@@ -1,55 +1,46 @@
-﻿using DataAccesLayer.CustomExceptions;
-using DataAccesLayer.Repositories;
+﻿using DataAccesLayer.Repositories.Interfaces;
 using DomainModel;
 using Services.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Services
+namespace Services;
+
+public class ManagerService : IManagerService
 {
-    public class ManagerService : IManagerService
+    private readonly IManagerRepository _managerRepository;
 
+    public ManagerService(IManagerRepository managerRepository)
     {
-        public List<Manager> GetAllManagers()
-        {
-            ManagerRepo managerRepository = new ManagerRepo();
-            List<Manager> managers = managerRepository.GetAllManagers();
-            return managers;
-        }
+        _managerRepository = managerRepository;
+    }
+    public List<Manager> GetAllManagers()
+    {
+        return _managerRepository.GetAllManagers();
+    }
 
-        public List<Manager> GetAllActiveManagers()
-        {
-            ManagerRepo managerRepository = new ManagerRepo();
-            List<Manager> managers = managerRepository.GetAllActiveManagers();
-            return managers;
-        }
+    public List<Manager> GetAllActiveManagers()
+    {
+        return _managerRepository.GetAllActiveManagers();
+    }
 
-        public Manager CreateManager(Manager manager)
-        {
-                ManagerRepo managerRepository = new ManagerRepo();
-                managerRepository.CreateManager(manager);
-                return manager;
-        }
+    public Manager CreateManager(Manager manager)
+    {
+        _managerRepository.CreateManager(manager);
+        return manager;
+    }
 
-        public Manager GetManagerByManagerName(string managerName)
-        {
-            ManagerRepo ManagerRepository = new ManagerRepo();
-            Manager manager = ManagerRepository.GetManagerByManagerName(managerName);
-            return manager;
-        }
+    public Manager GetManagerByManagerName(string managerName)
+    {
+        return _managerRepository.GetManagerByManagerName(managerName);
+    }
 
-        public Manager GetManagerById(int id)
-        {
-            ManagerRepo ManagerRepository = new ManagerRepo();
-            Manager manager = ManagerRepository.GetManagerById(id);
-            return manager;
-        }
+    public Manager GetManagerById(int id)
+    {
+        return _managerRepository.GetManagerById(id);
+    }
 
-        public void Edit(Manager manager)
-        {
-            ManagerRepo managerRepository = new ManagerRepo();
-            managerRepository.Edit(manager);
-        }
+    public void Edit(Manager manager)
+    {
+        _managerRepository.Edit(manager);
     }
 }

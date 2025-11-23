@@ -1,5 +1,5 @@
 ﻿using DataAccesLayer.CustomExceptions;
-using DataAccessLayer;
+using DataAccesLayer.Repositories.Interfaces;
 using DataAccessLayer.Repositories;
 using DomainModel;
 using Services.Interfaces;
@@ -10,16 +10,22 @@ namespace Services
 {
     public class ProjectService : IProjectService
     {
+        private readonly IProjectRepository _projectRepository;
+
+        public ProjectService(IProjectRepository projectRepository)
+        {
+            _projectRepository = projectRepository;
+        }
+
         public Project Create(Project project)
         {
             try
             {
-                ProjectRepo projectRepository = new ProjectRepo();
-                if (projectRepository.DoesProjectExist(project.ProjectName))
+                if (_projectRepository.DoesProjectExist(project.ProjectName))
                 {
                     throw new ValidationServiceException("Project with this name = " + project.ProjectName + ", already exist in database.");
                 }
-                projectRepository.Create(project);
+                _projectRepository.Create(project);
                 return project;
             }
             catch (ValidationServiceException)
@@ -38,35 +44,27 @@ namespace Services
 
         public Project GetProjectByID(int Id)
         {
-            ProjectRepo projectRepository = new ProjectRepo();
-            Project project = projectRepository.GetProjectById(Id);
-            return project;
+            return _projectRepository.GetProjectById(Id);
         }
 
         public Project GetProjectByProjectname(string ProjectName)
         {
-            ProjectRepo projectRepository = new ProjectRepo();
-            Project project = projectRepository.getProjectByProjectname(ProjectName);
-            return project;
+            return _projectRepository.GetProjectByProjectName(ProjectName);
         }
 
         public List<Project> GetAllProjects()
         {
-            ProjectRepo projectRepository = new ProjectRepo();
-            List<Project> projects = projectRepository.GetAllProjects();
-            return projects;
+            return _projectRepository.GetAllProjects();
         }
 
         public void Delete(Project project)
         {
-            ProjectRepo projectRepository = new ProjectRepo();
-            projectRepository.Delete(project);
+            _projectRepository.Delete(project);
         }
 
         public void Edit(Project project)
         {
-            ProjectRepo projectRepository = new ProjectRepo();
-            projectRepository.Edit(project);
+            _projectRepository.Edit(project);
         }
     }
 }
